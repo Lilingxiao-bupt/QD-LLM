@@ -128,7 +128,6 @@ def binary_accuracy(preds, y):
     # acc = correct.sum() / len(correct)
     # probs = ops.sigmoid(preds)
 
-    # 二分类
     # output_label = []
     # for j in preds:
     #     if j[0] > j[1]:
@@ -150,13 +149,12 @@ def binary_accuracy(preds, y):
     # acc = round(acc.asnumpy().item(), 4)
     # precision, recall, F1 = calculate_metrics(output_label, y)
 
-    # 三分类
     probs = ops.sigmoid(preds)
-    pred_classes = ops.Argmax(axis=1)(probs)  # 获取预测类别
-    correct = pred_classes == y.astype(mnp.int32)  # 检查预测是否正确
+    pred_classes = ops.Argmax(axis=1)(probs)
+    correct = pred_classes == y.astype(mnp.int32)  
     correct = correct.astype(mnp.float32)
-    acc = mnp.mean(correct)  # 计算准确率
-    acc = round(acc.asnumpy().item(), 4)  # 将准确率转换为标量并四舍五入
+    acc = mnp.mean(correct)
+    acc = round(acc.asnumpy().item(), 4) 
 
 
     precision, recall, F1 = calculate_metrics(pred_classes, y)
@@ -209,14 +207,12 @@ data_name = "stega"   # Steganalysis
 # data_name = "topic"     # Thematic analysis
 # data_name = "wino"     # Thematic analysis
 
-# 二分类
 train_neg_path = './Dataset/' + data_name + '/train_neg.txt'
 train_pos_path = './Dataset/' + data_name + '/train_pos.txt'
 test_neg_path = './Dataset/' + data_name + '/test_neg.txt'
 test_pos_path = './Dataset/' + data_name + '/test_pos.txt'
 # imdb_trai, imdb_tes = load_dataset(train_neg_path, train_pos_path, test_neg_path, test_pos_path)
 
-# 三分类
 # train_offensive_path = './Dataset/' + data_name + '/train_offensive.txt'
 # train_hate_path = './Dataset/' + data_name + '/train_hate.txt'
 # train_none_path = './Dataset/' + data_name + '/train_none.txt'
@@ -226,7 +222,6 @@ test_pos_path = './Dataset/' + data_name + '/test_pos.txt'
 # imdb_trai, imdb_tes = load_dataset(train_offensive_path, train_hate_path, train_none_path,
 #                                     test_offensive_path, test_hate_path, test_none_path)
 
-# 四分类
 # train_business_path = './Dataset/' + data_name + '/train_business.txt'
 # train_sci_path = './Dataset/' + data_name + '/train_sci.txt'
 # train_sport_path = './Dataset/' + data_name + '/train_sport.txt'
@@ -241,13 +236,11 @@ test_pos_path = './Dataset/' + data_name + '/test_pos.txt'
 parser = argparse.ArgumentParser(description='QNLP')
 parser.add_argument('-shuffle', action='store_true', default=False, help='shuffle the data every epoch.')
 
-# 二分类
 parser.add_argument('-train-cover-dir', type=str, default=train_neg_path, help='the path of train cover data. [default: tweets_cover.txt]')
 parser.add_argument('-train-stego-dir', type=str, default=train_pos_path, help='the path of train stego data. [default: tweets_stego.txt]')
 parser.add_argument('-test-cover-dir', type=str, default=test_neg_path, help='the path of test cover data. [default: test_cover.txt]')
 parser.add_argument('-test-stego-dir', type=str, default=test_pos_path, help='the path of test stego data. [default: test_stego.txt]')
 
-# 三分类
 # parser.add_argument('-train-offensive-dir', type=str, default=train_offensive_path, help='the path of train cover data. [default: tweets_cover.txt]')
 # parser.add_argument('-train-hate-dir', type=str, default=train_hate_path, help='the path of train stego data. [default: tweets_stego.txt]')
 # parser.add_argument('-train-none-dir', type=str, default=train_none_path, help='the path of train stego data. [default: tweets_stego.txt]')
@@ -255,7 +248,6 @@ parser.add_argument('-test-stego-dir', type=str, default=test_pos_path, help='th
 # parser.add_argument('-test-hate-dir', type=str, default=test_hate_path, help='the path of test stego data. [default: test_stego.txt]')
 # parser.add_argument('-test-none-dir', type=str, default=test_none_path, help='the path of test stego data. [default: test_stego.txt]')
 
-# 四分类
 # parser.add_argument('-train-business-dir', type=str, default=train_business_path, help='the path of train cover data. [default: tweets_cover.txt]')
 # parser.add_argument('-train-sci-dir', type=str, default=train_sci_path, help='the path of train stego data. [default: tweets_stego.txt]')
 # parser.add_argument('-train-sport-dir', type=str, default=train_sport_path, help='the path of train stego data. [default: tweets_stego.txt]')
@@ -306,13 +298,9 @@ lora_weights = '../models_hf/fine-tuning/teacher_model/model_output/' + args.LLM
 # template_path = "../models_hf/fine-tuning/teacher_model/templates/alpaca.json"  # gen
 template_path = "../models_hf/fine-tuning/teacher_model/cla/prompt1.json"  # cla
 
-# 创建模型实例
 if args.num_epochs != 0:
     tearcher_model = QNLP_network.LLM_teacher(base_model, tokenizer_pth, lora_weights, template_path, args)
 init_model = QNLP_network.Embedding(args, args.qbits)
-if args.LLM == 'BLOOMZ-1.1B': llm = 'b'
-elif args.LLM == 'BLOOMZ-3B': llm = 'c'
-elif args.LLM == 'LLaMA2-7B' or args.LLM == 'LLaMA3-8B': llm = 'l'
 
 acc_max, p_max, r_max, f1_max = [], [], [], []
 model = QNLP_network.RNN(args.hidden_size, args.output_size, args.num_layers, args)
@@ -328,7 +316,7 @@ for param in trainable_params:
 print(f"Total trainable parameters count: {total_params_count}")
 cache_dir = './save_model'
 
-for i in range(1):
+for i in range(10):
     print("===================================== Iter:", i, "=====================================")
 
     test_acc_total, test_p_total, test_r_total, test_f1_total = [], [], [], []
@@ -346,7 +334,7 @@ for i in range(1):
     best_valid_loss = float('inf')
     best_valid_acc = float('inf')
     if args.alpha != 0:
-        init_model.load_state_dict(torch.load('./init_model/' + data_name + '_' + llm + '.pt'))
+        init_model.load_state_dict(torch.load('./init_model/' + data_name + '_1.pt'))  # BERT-base
 
     for epoch in range(args.num_epochs):
         train_one_epoch(model, train_iter, epoch)
