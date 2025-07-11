@@ -1,6 +1,6 @@
 # QD-LLM: Quantum Knowledge Distillation for Large Language Models
 
-QD-LLM is a novel framework that distills the power of large language models (LLMs) into compact quantum student models using variational quantum circuits. This enables efficient deployment of NLP models on resource-constrained hardware while maintaining high performance.
+QD-LLM is a novel framework that distills the power of large language models (LLMs) into a compact quantum model using variational quantum circuits. This enables efficient deployment of NLP models on resource-constrained hardware while maintaining high performance.
 
 
 
@@ -39,8 +39,8 @@ These datasets can be seen in the Dataset file.
 
 | Model    | Links                                                             |
 | ---------| ----------------------------------------------------------------- |
-| LLaMA 2  | Meta AI (https://github.com/meta-llama/llama)                     |
-| LLaMA 3  | Meta AI (https://ai.meta.com/llama/)                              |
+| LLaMA2-7B  | Meta AI (https://github.com/meta-llama/llama)                     |
+| LLaMA3-8B  | Meta AI (https://ai.meta.com/llama/)                              |
 | OPT      | OPT GitHub (https://github.com/facebookresearch/metaseq)          |
 | BLOOMZ   | BLOOMZ on HuggingFace (https://huggingface.co/bigscience/bloomz)  |
 
